@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd  
+    http://www.springframework.org/schema/aop  
+    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd  
+    http://www.springframework.org/schema/tx  
+    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd  ">
+
+	<context:component-scan base-package="com.dpp.rent.service" />
+	
+	<context:property-placeholder location="classpath:mysql.properties"/>
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName">
+			<value>${jdbc_driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc_url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc_username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc_password}</value>
+		</property>
+		<!-- 连接池最大使用连接数 -->
+		<property name="maxActive">
+			<value>10</value>
+		</property>
+		<!-- 初始化连接大小 -->
+		<property name="initialSize">
+			<value>1</value>
+		</property>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait">
+			<value>60000</value>
+		</property>
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle">
+			<value>20</value>
+		</property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle">
+			<value>5</value>
+		</property>
+		<property name="numTestsPerEvictionRun" value="3" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="validationQuery" value="SELECT 1" />
+	</bean>
+
+	<!-- mybatis文件配置，扫描所有mapper文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:/mapper/*/*.xml" />
+       </bean> 
+
+	<!-- spring与mybatis整合配置，扫描所有dao -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" 
+		p:basePackage="com.dpp.rent.service.dao"
+		p:sqlSessionFactoryBeanName="sqlSessionFactory" />
+
+	<!-- 对数据源进行事务管理 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource" />
+		
+		
+		<!-- redis连接池配置 -->  
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">  
+        <!-- 最大连接数 -->  
+        <property name="maxTotal" value="30" />  
+        <!-- 最大空闲连接数 -->  
+        <property name="maxIdle" value="10" />  
+        <!-- 每次释放连接的最大数目 -->  
+        <property name="numTestsPerEvictionRun" value="1024" />  
+        <!-- 释放连接的扫描间隔（毫秒） -->  
+        <property name="timeBetweenEvictionRunsMillis" value="30000" />  
+        <!-- 连接最小空闲时间 -->  
+        <property name="minEvictableIdleTimeMillis" value="1800000" />  
+        <!-- 连接空闲多久后释放, 当空闲时间>该值 且 空闲连接>最大空闲连接数 时直接释放 -->  
+        <property name="softMinEvictableIdleTimeMillis" value="10000" />  
+        <!-- 获取连接时的最大等待毫秒数,小于零:阻塞不确定的时间,默认-1 -->  
+        <property name="maxWaitMillis" value="1500" />  
+        <!-- 在获取连接的时候检查有效性, 默认false -->  
+        <property name="testOnBorrow" value="true" />  
+        <!-- 在空闲时检查有效性, 默认false -->  
+        <property name="testWhileIdle" value="true" />  
+        <!-- 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true -->  
+        <property name="blockWhenExhausted" value="false" />  
+    </bean>     
+  
+     <!-- JedisConnectionFactory -->  
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">  
+        <property name="hostName" value="127.0.0.1"/>
+        <property name="port" value="6379"/>  
+        <property name="poolConfig" ref="jedisPoolConfig"/>  
+    </bean>  
+    <!-- redis客户端实现类 -->  
+     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"  
+          p:connectionFactory-ref="jedisConnectionFactory">  
+        <property name="keySerializer">  
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"></bean>  
+        </property>  
+        <property name="valueSerializer">  
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>  
+        </property>  
+        <property name="hashKeySerializer">  
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>  
+        </property>  
+        <property name="hashValueSerializer">  
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>  
+        </property>  
+    </bean>  
+    
+    <bean id="springContextUtils" class="com.dpp.rent.service.util.SpringContextUtils" />
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 全局配置 -->
+    <settings>
+        <!--是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN 到经典Java 属性名 aColumn 的类似映射。 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+     </settings>
+    <typeAliases>
+         <typeAlias alias="User" type="com.dpp.rent.app.api.domain.User"/> 
+         <typeAlias alias="UserBuyHouse" type="com.dpp.rent.app.api.domain.UserBuyHouse"/> 
+         <typeAlias alias="Area" type="com.dpp.rent.app.api.domain.Area"/> 
+         <typeAlias alias="TradeArea" type="com.dpp.rent.app.api.domain.TradeArea"/> 
+         <typeAlias alias="Cooperation" type="com.dpp.rent.app.api.domain.Cooperation"/> 
+         <typeAlias alias="AgentHouse" type="com.dpp.rent.app.api.domain.AgentHouse"/> 
+         <typeAlias alias="AgentAttachHouse" type="com.dpp.rent.app.api.domain.AgentAttachHouse"/> 
+         <typeAlias alias="TradeAreaDto" type="com.dpp.rent.app.api.model.response.TradeAreaDto"/> 
+         <typeAlias alias="AgentHouseVo" type="com.dpp.rent.app.api.model.request.agent.AgentHouseVo"/> 
+         <typeAlias alias="AgentHouseDto" type="com.dpp.rent.app.api.model.response.AgentHouseDto"/> 
+    </typeAliases>
+    <!-- 映射map -->
+    <mappers>
+    </mappers>
+</configuration>

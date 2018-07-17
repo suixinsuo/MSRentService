@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dpp.rent.service.dao.area.CooperationDao">
+
+	<select id="getAllCooperation" parameterType="Map" resultType="Cooperation">
+	 	select Coo_id,Coo_name,remark,Coo_address from t_cooperation 
+		<where>
+			<if test="cooName!=null and cooName!=''"> Coo_name like CONCAT('%','${cooName}','%')</if>
+			<if test="tradeId!=null and tradeId!=''"> and Trade_id=#{tradeId}</if>
+		</where>
+	</select> 
+	
+	
+	<insert id="saveCooperation" parameterType="Cooperation">
+   	 insert into t_cooperation
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+		      <if test="cooId != null and cooId !=''">coo_Id,</if>
+		      <if test="cooName != null and cooName!=''">coo_Name,</if>
+		      <if test="cooAddress != null and cooAddress!=''">coo_Address,</if>
+		      <if test="tradeId != null and tradeId != ''">trade_Id,</if>
+		      <if test="status!= null and status!=''">status,</if>
+		      <if test="remark!= null and remark!=''">remark,</if>
+    	</trim>
+   		 <trim prefix="values (" suffix=")" suffixOverrides=",">
+     	  	  <if test="cooId != null and cooId !=''">#{cooId},</if>
+		      <if test="cooName != null and cooName!=''">#{cooName},</if>
+		      <if test="cooAddress != null and cooAddress!=''">#{cooAddress},</if>
+		      <if test="tradeId != null and tradeId != ''">#{tradeId},</if>
+		      <if test="status!= null and status!=''">#{status},</if>
+		      <if test="remark!= null and remark!=''">#{remark},</if>
+    	</trim>
+  	</insert>
+  	
+  	<select id="getMaxCooId" resultType="String">
+	 	select max(coo_id) from t_cooperation;
+	</select>
+</mapper>

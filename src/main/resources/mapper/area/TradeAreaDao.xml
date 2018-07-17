@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dpp.rent.service.dao.area.TradeAreaDao">
+
+	<select id="getTradeAreaByAreaId" parameterType="String" resultType="TradeArea">
+	 	select trade_id,area_id,trade_name from t_trade_area where area_id=#{areaId}
+	</select>
+	
+	
+	
+	<select id="getAllTradeArea" resultType="TradeAreaDto">
+	select a.area_id,a.area_name,t.trade_id,t.trade_name,t.remark 
+	from t_trade_area t left join t_area a on t.Area_id = a.area_id 	
+	</select>
+	
+	
+	<select id="getTradeAreaById" parameterType="String" resultType="TradeArea">
+	 	select trade_id,area_id,trade_name from t_trade_area where area_id=#{areaId}
+	</select>
+</mapper>

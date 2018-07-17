@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dpp.rent.service.dao.user.UserDao">
+
+	<select id="getUser" parameterType="String" resultType="User">
+	 	select id,name,password,createdate,type,link_Code,status from t_user where id=#{id}
+	</select>
+	
+	<select id="getUserByParam" parameterType="User" resultType="User">
+	 	select id,name,password,createdate,type,status,Link_code,Parent_id 
+	 	from t_user
+	 	<where> 
+		    <if test="id != null and id != ''" >id = #{id} </if> 
+		    <if test="linkCode != null and linkCode != ''">and link_Code = #{linkCode} </if> 
+		    <if test="status != null and status != ''">and status = #{status} </if> 
+		    <if test="parentId != null and parentId != ''">and Parent_id = #{parentId} </if> 
+		    <if test="name != null and name != ''">and name = #{name} </if> 
+		    <if test="type != null and type != ''">and type = #{type} </if> 
+  		</where>
+  		order by createdate desc 
+	</select>
+	
+	
+	<insert id="saveUser" parameterType="User">
+   	 insert into t_user
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+		      <if test="id != null and id!=''">id,</if>
+		      <if test="password != null and password!=''">password,</if>
+		      <if test="name != null and name!=''">name,</if>
+		      <if test="createDate!= null">createdate,</if>
+		      <if test="type!= null and type!=''">type,</if>
+		      <if test="status!= null and status!=''">status,</if>
+		      <if test="tradeId != null and tradeId!=''">trade_Id,</if>
+		      <if test="cooId != null and cooId!=''">coo_Id,</if>
+		      <if test="linkCode != null and linkCode!=''">link_Code,</if>
+		      <if test="parentId != null and parentId!=''">parent_Id,</if>
+    	</trim>
+   		 <trim prefix="values (" suffix=")" suffixOverrides=",">
+     	  	  <if test="id != null and id!=''">#{id},</if>
+		      <if test="password != null and password!=''">#{password},</if>
+		      <if test="name != null and name!=''">#{name},</if>
+		      <if test="createDate != null">#{createDate},</if>
+		      <if test="type!= null and type!=''">#{type},</if>
+		      <if test="status!= null and status!=''">#{status},</if>
+		      <if test="tradeId != null and tradeId!=''">#{tradeId},</if>
+		      <if test="cooId != null and cooId!=''">#{cooId},</if>
+		      <if test="linkCode != null and linkCode!=''">#{linkCode},</if>
+		      <if test="parentId != null and parentId!=''">#{parentId},</if>
+    	</trim>
+  	</insert>
+		
+	<update id="updatePwd" parameterType="User">
+		update t_user set password = #{password} where id=#{id}
+	</update>
+	
+	<select id="getAllUser" resultType="User">
+	 	select id,name,password,createdate,type,status from t_user
+	</select>
+	
+	<select id="getMaxLinkCode" resultType="String">
+	 	select max(link_code) from t_user;
+	</select>
+	
+	
+</mapper>

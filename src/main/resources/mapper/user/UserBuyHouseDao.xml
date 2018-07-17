@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dpp.rent.service.dao.user.UserBuyHouseDao">
+	
+	
+	<!-- 查询最大id -->
+	<select id="getMaxHouseId" resultType="String">
+		select max(house_id)+1 from t_user_buyhouse
+	</select>
+	<!-- 新增用户意向房源-->
+	<insert id="addUserBuyHouse" parameterType="UserBuyHouse">
+	 	insert into t_user_buyhouse
+	 	<trim prefix="(" suffix=")" suffixOverrides=",">
+	 		<if test="houseId != null">house_id,</if>
+	 		<if test="id != null and id != ''">id,</if>
+	 		<if test="type != null and type != ''">type,</if>
+	 		<if test="expectPrice != null">Expect_price,</if>
+	 		<if test="huxing != null and huxing != ''">Huxing,</if>
+	 		<if test="housePhone != null and housePhone != ''">house_phone,</if>
+	 		<if test="remark != null and remark != ''">Remark,</if>
+	 		<if test="houseArea != null">House_area,</if>
+	 		<if test="communityName != null and communityName != ''">community_name,</if>
+	 		<if test="address != null and address != ''">Address,</if>
+	 		<if test="pedestal != null and pedestal != ''">pedestal,</if>
+	 		<if test="unit != null and unit != ''">Unit,</if>
+	 		<if test="roomNum != null and roomNum != ''">RoomNum,</if>
+	 		<if test="areaType != null and areaType != ''">Area_type,</if>
+	 		<if test="area1 != null and area1 != ''">Area1,</if>
+	 		<if test="area2 != null and area2 != ''">Area2,</if>
+	 		<if test="createDate != null">Create_date,</if>
+	 		<if test="status != null and status != ''">status,</if>
+	 		<if test="name != null and name != ''">name,</if>
+      		
+	 	</trim>
+	 	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	 		<if test="houseId != null ">#{houseId},</if>
+		 	<if test="id != null and id != ''">#{id},</if>
+		 	<if test="type != null and type != ''">#{type},</if>
+		 	<if test="expectPrice != null ">#{expectPrice},</if>
+		 	<if test="huxing != null and huxing != ''">#{huxing},</if>
+		 	<if test="housePhone != null and housePhone != ''">#{housePhone},</if>
+		 	<if test="remark != null and remark != ''">#{remark},</if>
+		 	<if test="houseArea != null">#{houseArea},</if>
+		 	<if test="communityName != null and communityName != ''">#{communityName},</if>
+		 	<if test="address != null and address != ''">#{address},</if>
+		 	<if test="pedestal != null and pedestal != ''">#{pedestal},</if>
+		 	<if test="unit != null and unit != ''">#{unit},</if>
+		 	<if test="roomNum != null and roomNum != ''">#{roomNum},</if>
+		 	<if test="areaType != null and areaType != ''">#{areaType},</if>
+		 	<if test="area1 != null and area1 != ''">#{area1},</if>
+		 	<if test="area2 != null and area2 != ''">#{area2},</if>
+		 	<if test="createDate != null">#{createDate},</if>
+		 	<if test="status != null and status != ''">#{status},</if>
+		 	<if test="name != null and name != ''">#{name},</if>
+		</trim>
+	</insert>
+	
+</mapper>

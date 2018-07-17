@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dpp.rent.service.dao.agent.AgentHouseDao">
+
+	<select id="getAgentHouse" parameterType="AgentHouseVo" resultType="AgentHouseDto">
+		select a.child_Id,a.id,a.type,a.status,a.Create_date, a.House_id,h.price,h.Per_price,h.Huxing,h.Ting,
+			h.Remark,h.House_area,h.Orientation,h.House_label,h.House_date,
+			h.Floor_level,h.Trade_id,h.Coo_id,h.Elevator,h.purpose,h.Power,
+			h.Pre_pay,h.Renovation,h.House_des,h.Look_des,h.house_title,h.house_pic,h.trade_name,h.coo_name,h.coo_address 
+		from t_agent_house a left join t_agent_attach_house h 
+		on a.House_id=h.House_id
+		<where>
+			 <if test="id!= null and id !=''">a.id=#{id} </if>
+			 <if test="tradeId!= null and tradeId !=''"> and Trade_id=#{tradeId}</if>
+			 
+			 <if test="huxing!= null and huxing !=''"> and huxing=#{huxing} </if>
+			 <if test="orientation!= null and orientation !=''"> and orientation=#{orientation}</if>
+			 <if test="beginPrice!= null and beginPrice !=''"> and CONVERT(price,SIGNED)>= CONVERT(#{beginPrice},SIGNED)</if>
+			 <if test="endPrice!= null and endPrice !=''"> and CONVERT(price,SIGNED) &lt;= CONVERT(#{endPrice},SIGNED)</if>
+			 
+			 <if test="beginHouseArea!= null and beginHouseArea!=''"> and CONVERT(House_Area,SIGNED)>= CONVERT(#{beginHouseArea},SIGNED)</if>
+			 <if test="endHouseArea!= null and endHouseArea !=''"> and CONVERT(House_Area,SIGNED) &lt;= CONVERT(#{endHouseArea},SIGNED) </if>
+			 
+			 <if test="beginHouseDate!= null and beginHouseDate!=''"> and CONVERT(House_date,SIGNED)>=CONVERT(#{beginHouseDate},SIGNED) </if>
+			 <if test="endHouseDate!= null and endHouseDate !=''"> and CONVERT(House_date,SIGNED) &lt;= CONVERT(#{endHouseDate},SIGNED)</if>
+			
+			 <if test="beginFloorLevel!= null and beginFloorLevel!=''"> and CONVERT(Floor_Level,SIGNED)>= CONVERT(#{beginFloorLevel},SIGNED)</if>
+			 <if test="endFloorLevel!= null and endFloorLevel !=''"> and CONVERT(Floor_Level,SIGNED) &lt;= CONVERT(#{endFloorLevel},SIGNED)</if>
+				
+			 <if test="childId!= null and childId !=''"> and a.child_Id=#{childId}</if>
+			 <if test="type!= null and type !=''"> and a.type=#{type}</if>
+			 <if test="status!= null and status !=''"> and a.status=#{status}</if>
+			 <if test="cooName!= null and cooName !=''"> and (coo_name like CONCAT('%','${cooName}','%') or coo_address like CONCAT('%','${cooName}','%'))  </if>
+		</where>
+	</select> 
+	
+	
+	<insert id="addAgentHouse" parameterType="AgentHouse">
+   	 insert into t_agent_house
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+		      <if test="houseId!= null and houseId !=''">house_Id,</if>
+		      <if test="id != null and id !=''">id,</if>
+		      <if test="type != null and type!=''">type,</if>
+		      <if test="createDate != null">create_Date,</if>
+		      <if test="status!= null and status!=''">status,</if>
+		      <if test="childId!= null and childId!=''">child_Id,</if>
+    	</trim>
+   		 <trim prefix="values (" suffix=")" suffixOverrides=",">
+     	  	  <if test="houseId!= null and houseId !=''">#{houseId},</if>
+		      <if test="id != null and id !=''">#{id},</if>
+		      <if test="type != null and type!=''">#{type},</if>
+		      <if test="createDate != null">#{createDate},</if>
+		      <if test="status!= null and status!=''">#{status},</if>
+		      <if test="childId!= null and childId!=''">#{childId},</if>
+    	</trim>
+  	</insert>
+  	
+  	<select id="maxAgentHouseId" resultType="String">
+	 	select max(house_id) from t_agent_house;
+	</select>
+</mapper>

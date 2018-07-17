@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dpp.rent.service.dao.agent.AgentAttachHouseDao">
+
+	
+	<insert id="addAgentAttachHouse" parameterType="AgentAttachHouse">
+   	 insert into t_agent_attach_house
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+		      <if test="houseId != null and houseId !=''">house_Id,</if>
+		      <if test="price != null and price!=''">price,</if>
+		      <if test="perPrice != null and perPrice!=''">per_Price,</if>
+		      <if test="huxing != null and huxing != ''">huxing,</if>
+		      <if test="ting!= null and ting!=''">ting,</if>
+		      <if test="remark!= null and remark!=''">remark,</if>
+		      <if test="houseArea!= null and houseArea!=''">house_Area,</if>
+		      <if test="orientation!= null and orientation!=''">orientation,</if>
+		      <if test="houseLabel!= null and houseLabel!=''">house_Label,</if>
+		      <if test="houseDate!= null and houseDate!=''">house_Date,</if>
+		      <if test="floorLevel!= null and floorLevel!=''">floor_Level,</if>
+		      <if test="tradeId!= null and tradeId!=''">trade_Id,</if>
+		      <if test="cooId!= null and cooId!=''">Coo_id,</if>
+		      <if test="elevator!= null and elevator!=''">elevator,</if>
+		      <if test="purpose!= null and purpose!=''">purpose,</if>
+		      <if test="power!= null and remark!=''">power,</if>
+		      <if test="prePay!= null and prePay!=''">pre_Pay,</if>
+		      <if test="renovation!= null and renovation!=''">renovation,</if>
+		      <if test="houseDes!= null and houseDes!=''">house_Des,</if>
+		      <if test="lookDes!= null and lookDes!=''">look_Des,</if>
+		      <if test="houseTitle!= null and houseTitle!=''">house_title,</if>
+		      <if test="housePic!= null and housePic!=''">house_pic,</if>
+		      
+		      <if test="tradeName!= null and tradeName!=''">trade_Name,</if>
+		      <if test="cooName!= null and cooName!=''">coo_Name,</if>
+		      <if test="cooAddress!= null and cooAddress!=''">coo_Address,</if>
+    	</trim>
+   		 <trim prefix="values (" suffix=")" suffixOverrides=",">
+     	  	  <if test="houseId != null and houseId !=''">#{houseId},</if>
+		      <if test="price != null and price!=''">#{price},</if>
+		      <if test="perPrice != null and perPrice!=''">#{perPrice},</if>
+		      <if test="huxing != null and huxing != ''">#{huxing},</if>
+		      <if test="ting!= null and ting!=''">#{ting},</if>
+		      <if test="remark!= null and remark!=''">#{remark},</if>
+		      <if test="houseArea!= null and houseArea!=''">#{houseArea},</if>
+		      <if test="orientation!= null and orientation!=''">#{orientation},</if>
+		      <if test="houseLabel!= null and houseLabel!=''">#{houseLabel},</if>
+		      <if test="houseDate!= null and houseDate!=''">#{houseDate},</if>
+		      <if test="floorLevel!= null and floorLevel!=''">#{floorLevel},</if>
+		      <if test="tradeId!= null and tradeId!=''">#{tradeId},</if>
+		      <if test="cooId!= null and cooId!=''">#{cooId},</if>
+		      <if test="elevator!= null and elevator!=''">#{elevator},</if>
+		      <if test="purpose!= null and purpose!=''">#{purpose},</if>
+		      <if test="power!= null and remark!=''">#{power},</if>
+		      <if test="prePay!= null and prePay!=''">#{prePay},</if>
+		      <if test="renovation!= null and renovation!=''">#{renovation},</if>
+		      <if test="houseDes!= null and houseDes!=''">#{houseDes},</if>
+		      <if test="lookDes!= null and lookDes!=''">#{lookDes},</if>
+		      <if test="houseTitle!= null and houseTitle!=''">#{houseTitle},</if>
+		      <if test="housePic!= null and housePic!=''">#{housePic},</if>
+		      <if test="tradeName!= null and tradeName!=''">#{tradeName},</if>
+		      <if test="cooName!= null and cooName!=''">#{cooName},</if>
+		      <if test="cooAddress!= null and cooAddress!=''">#{cooAddress},</if>
+    	</trim>
+  	</insert>
+</mapper>
