@@ -8,19 +8,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import sun.util.logging.resources.logging;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dpp.rent.app.api.constant.BusinessErrorCode;
 import com.dpp.rent.app.api.constant.CacheConstant;
 import com.dpp.rent.app.api.constant.MSConstant;
 import com.dpp.rent.app.api.domain.User;
 import com.dpp.rent.app.api.exception.BizException;
-import com.dpp.rent.app.api.model.BaseForm;
 import com.dpp.rent.app.api.model.request.LoginForm;
 import com.dpp.rent.app.api.model.request.QuickLoginForm;
 import com.dpp.rent.app.api.model.request.RegisterForm;
 import com.dpp.rent.app.api.model.response.LoginResponse;
+import com.dpp.rent.app.api.service.huanxin.HuanXinService;
 import com.dpp.rent.app.api.service.user.UserService;
 import com.dpp.rent.app.api.util.CacheService;
 import com.dpp.rent.app.api.util.UUIDTool;
@@ -36,6 +35,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private CacheService cacheService;
+	
+	@Autowired
+	private HuanXinService huanXinService;
 	
 	public LoginResponse userLogin(LoginForm loginForm) {
 		// 定义返回对象
@@ -100,6 +102,7 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 
+	@Transactional
 	public void register(RegisterForm registerForm) {
 		String id = registerForm.getId().trim();
 		User userRes = userDao.getUser(id);
@@ -120,12 +123,14 @@ public class UserServiceImpl implements UserService{
 		User user = new User();
 		// 注册码若不为空，查找该注册码所在经纪人
 		String linkCode = registerForm.getLinkCode();
-		User userReq = new User();
-		userReq.setLinkCode(linkCode);
-		List<User> userRep = userDao.getUserByParam(userReq);
-		if (null!=userRep && userRep.size()>0) {
-			// 查得到经纪人，则赋值经纪人
-			user.setParentId(userRep.get(0).getId());
+		if (StringUtils.isNotBlank(linkCode)) {
+			User userReq = new User();
+			userReq.setLinkCode(linkCode);
+			List<User> userRep = userDao.getUserByParam(userReq);
+			if (null!=userRep && userRep.size()>0) {
+				// 查得到经纪人，则赋值经纪人
+				user.setParentId(userRep.get(0).getId());
+			}
 		}
 		user.setId(id);
 		user.setPassword(registerForm.getPassword());
@@ -133,6 +138,9 @@ public class UserServiceImpl implements UserService{
 		user.setStatus("1"); // 1.正常状态
 		user.setType("0");  // 0.用户
 		userDao.saveUser(user);
+		// 环信注册用户
+		huanXinService.addUser(id, registerForm.getPassword());
+		
 	}
 
 	public LoginResponse quickLogin(QuickLoginForm quickLoginForm) {
